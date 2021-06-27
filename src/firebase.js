@@ -1,8 +1,18 @@
+import firebase from "firebase";
+import { development as environment } from "./environment";
 const firebaseConfig = {
-  apiKey: "AIzaSyAoTBF31G3RawjAK7JMO2Edn9dCkatJAqo",
-  authDomain: "gbook-366c4.firebaseapp.com",
-  projectId: "gbook-366c4",
-  storageBucket: "gbook-366c4.appspot.com",
-  messagingSenderId: "845806840084",
-  appId: "1:845806840084:web:0fbe8f40cf6574780fba01",
+  apiKey: environment.apiKey,
+  authDomain: environment.authDomain,
+  projectId: environment.projectId,
+  storageBucket: environment.storageBucket,
+  messagingSenderId: environment.messagingSenderId,
+  appId: environment.appId,
 };
+
+const firebaseApp = firebase.initializeApp(firebaseConfig); //initalizing the app and connecting the frontend with backend
+const db = firebaseApp.firestore(); //realtime db
+const auth = firebase.auth(); //for login or signin
+const provider = new firebase.auth.GoogleAuthProvider(); //signin into the app using multiple authentications providers
+
+export { auth, provider };
+export default db;

@@ -11,10 +11,10 @@ import AddIcon from "@material-ui/icons/Add";
 import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
 import ForumIcon from "@material-ui/icons/Forum";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-// import {useStateValue} from './StateProvider'
+import { useStateValue } from "./StateProvider";
 import "./Header.css";
 function Header() {
-  //   const [{ user }, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   return (
     <div className="header">
       <div className="header__left">
@@ -43,8 +43,8 @@ function Header() {
       </div>
       <div className="header__right">
         <div className="header__info">
-          <Avatar />
-          <h4>Rishi</h4>
+          <Avatar src={user.photoURL} />
+          <h4>{user.displayName}</h4>
         </div>
         <IconButton>
           <AddIcon />

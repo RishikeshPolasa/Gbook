@@ -1,15 +1,24 @@
 import React, { useState } from "react";
+import { render } from "react-dom";
 import { Avatar } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
+import { Gif } from "@giphy/react-components";
+import { GiphyFetch } from "@giphy/js-fetch-api";
 import db from "./firebase";
 import firebase from "firebase";
 import "./MessageSender.css";
 import { useStateValue } from "./StateProvider";
+
+const Gif_search = new GiphyFetch("FoCnIK7UM6EWbCBbjxT7ytm0gy9h5V99");
+
 function MessageSender() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [gif, setGif] = useState("");
+  const [images, setImages] = useState([]);
+  const [visible, setVisible] = useState(true);
   const [{ user, dispatch }] = useStateValue();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +31,40 @@ function MessageSender() {
     });
     setInput("");
     setImageUrl("");
+    setGif("");
+  };
+
+  //search for gif
+
+  const fetchGifs = () => {
+    try {
+      Gif_search.search(gif, { sort: "recent", limit: 8 }).then((result) => {
+        // console.log(result);
+        const url = [];
+        result.data.forEach((gifItem, index) => {
+          if (gifItem.images.original) {
+            url.push(gifItem.images.original.url);
+          } else {
+            console.log(index);
+          }
+        });
+
+        setImages(url);
+        // console.log(typeof url);
+        // // setImages(Array.from(...url));
+        // console.log('images are',images);
+      });
+      // console.log('result',result);
+    } catch (err) {
+      console.log(err);
+    }
+    setVisible(!visible);
+  };
+  const getUrl = (e) => {
+    console.log(e.target.attributes["data-url"].value);
+    const url = e.target.attributes["data-url"].value;
+    setVisible(!visible);
+    setImageUrl(url);
   };
   return (
     <div className="messageSender">
@@ -32,7 +75,7 @@ function MessageSender() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="messageSender__input"
-            placeholder="What's on your mind"
+            placeholder={`Whats on your mind ${user.displayName} ?`}
             type="text"
           />
           <input
@@ -42,9 +85,18 @@ function MessageSender() {
             type="text"
           />
           <button onClick={handleSubmit} type="submit">
-            Hidden Submit
+            Post
           </button>
         </form>
+      </div>
+      <div className="messageSender__middle">
+        <input
+          type="text"
+          placeholder=" Gif"
+          onChange={(e) => setGif(e.target.value)}
+          value={gif}
+        />
+        <button onClick={fetchGifs}>search gif</button>
       </div>
       <div className="messageSender__bottom">
         <div className="messageSender__option">
@@ -59,6 +111,21 @@ function MessageSender() {
           <InsertEmoticonIcon style={{ color: "orange" }} />
           <h3>Feeling/Activity</h3>
         </div>
+      </div>
+      <div>
+        {!visible &&
+          images?.map((img) => (
+            <img
+              src={img}
+              alt={input}
+              width="193px"
+              height="200px"
+              crossOrigin
+              onClick={getUrl}
+              data-url={img}
+            />
+            // <Gif src={img} width={200} />
+          ))}
       </div>
     </div>
   );

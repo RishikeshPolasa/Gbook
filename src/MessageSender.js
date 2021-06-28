@@ -19,6 +19,7 @@ function MessageSender() {
   const [gif, setGif] = useState("");
   const [images, setImages] = useState([]);
   const [visible, setVisible] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [{ user, dispatch }] = useStateValue();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +38,7 @@ function MessageSender() {
   //search for gif
 
   const fetchGifs = () => {
+    setSearching(true);
     try {
       Gif_search.search(gif, { sort: "recent", limit: 8 }).then((result) => {
         // console.log(result);
@@ -50,6 +52,7 @@ function MessageSender() {
         });
 
         setImages(url);
+        setSearching(false);
         // console.log(typeof url);
         // // setImages(Array.from(...url));
         // console.log('images are',images);
@@ -73,9 +76,10 @@ function MessageSender() {
         <form>
           <input
             value={input}
+            required
             onChange={(e) => setInput(e.target.value)}
             className="messageSender__input"
-            placeholder={`Whats on your mind ${user.displayName} ?`}
+            placeholder="What's on your mind?"
             type="text"
           />
           <input
@@ -112,13 +116,14 @@ function MessageSender() {
           <h3>Feeling/Activity</h3>
         </div>
       </div>
-      <div>
+      <div className="gifs">
+        {searching && <div className="loading"></div>}
         {!visible &&
           images?.map((img) => (
             <img
               src={img}
               alt={input}
-              width="193px"
+              width="177px"
               height="200px"
               crossOrigin
               onClick={getUrl}

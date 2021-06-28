@@ -92,3 +92,56 @@
   background-color: white;
   color: #2e81f4;
 }
+/* loading */
+/*loading */
+.loading::before {
+  content: "";
+  width: 30px;
+  height: 30px;
+  background: #2e81f4;
+  position: absolute;
+  border-radius: 50%;
+  animation: loadings 1s ease infinite;
+}
+@keyframes loadings {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+.loading {
+  position: absolute;
+  left: 21.2rem;
+  bottom: -11.5rem;
+  width: 744px;
+  height: 420px;
+  display: block;
+  /* border: 1px solid red; */
+  background: rbg(116, 23, 231);
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: 0.7s ease-in-out;
+}
+.loading::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  opacity: 0.5;
+  position: absolute;
+  border-radius: 50%;
+  animation: loadings 1.5s ease infinite;
+  border: 5px solid #fff;
+}
+
+.gifs > img {
+  margin: 5px;
+  margin-left: 7px;
+}
